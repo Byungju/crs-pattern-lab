@@ -8,6 +8,13 @@
 | 소스 코드 빌드 | [01-source-build.md](01-source-build.md) | 최신 (Git master) | 최신 (Git, 4.x) | 버전·기능·모듈을 원하는 대로 선택. 빌드 시간 소요 |
 | 패키지 설치 | [02-package-install.md](02-package-install.md) | 배포판 버전 | 배포판 버전 | 빠르고 간단. 배포판이 제공하는 버전으로 고정 |
 
+## 문서 목록
+
+- [00-sources.md](00-sources.md) : clone 저장소 경로 / 고정 commit / submodule
+- [01-source-build.md](01-source-build.md) : 소스 코드 빌드 절차
+- [02-package-install.md](02-package-install.md) : 패키지(apt) / Docker 설치
+- [scripts/](scripts/) : `build.sh`, `setup-config.sh` 참조 사본
+
 ## 어떤 방식을 쓸까
 
 - **최신 룰/엔진을 분석**하고 특정 버전을 고정하고 싶다 → **소스 빌드**
