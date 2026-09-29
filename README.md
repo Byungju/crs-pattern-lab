@@ -33,12 +33,36 @@ crs-pattern-lab/
 ├── README.md
 ├── docs/
 │   └── environment/          # 환경 구성 문서 (소스 빌드 / 패키지 설치)
+├── modsecurity/              # ModSecurity directive / 설정 분석 문서
+│   └── base-rules/           #   기본룰 분석
 ├── rules/                    # 룰별 분석 문서 (파일/룰 단위)
 ├── payloads/                 # 공격 예제 (HTTP 요청, 스크립트)
-└── logs/                     # 예제 실행 시 수집한 탐지 로그
+└── logs/
+    └── local_test/           # 스크립트가 생성한 임시 테스트 로그 (검증/공격 테스트)
 ```
 
 > 위 구조는 분석이 진행되면서 채워 나간다.
+
+## 분석 문서
+
+`modsecurity/` (실행 모델)
+
+- [ModSecurity 실행 모델 (설정 vs 룰, phase)](modsecurity/execution-model.md)
+  — directive/rule 적용·실행 시점, nginx 커넥터 훅, 로그가 남는 조건
+
+`modsecurity/base-rules/` (기본룰 분석)
+
+- [modsecurity.conf Directive 분석](modsecurity/base-rules/modsecurity-conf.md)
+  — 엔진/본문/응답/감사 로그/내장 룰 분석 (CRS Include 제외)
+- [crs-setup.conf Directive 분석](modsecurity/base-rules/crs-setup-conf.md)
+  — CRS 정책 변수/기본 동작/튜닝 옵션 분석
+
+`rules/` (CRS 룰 파일별 분석 + 룰 id 검증 예제)
+
+- [REQUEST-901-INITIALIZATION.conf](rules/REQUEST-901-INITIALIZATION/README.md)
+  — 초기화 룰 분석 + 룰 id별 검증 스크립트/로그 (`tests/`)
+- [REQUEST-905-COMMON-EXCEPTIONS.conf](rules/REQUEST-905-COMMON-EXCEPTIONS/README.md)
+  — 예외(화이트리스트) 룰 분석 + 검증 (`905100` 미발동 발견, `905110` 정상)
 
 ## 환경 구성
 
