@@ -63,6 +63,8 @@ crs-pattern-lab/
   — 초기화 룰 분석 + 룰 id별 검증 스크립트/로그 (`tests/`)
 - [REQUEST-905-COMMON-EXCEPTIONS.conf](rules/REQUEST-905-COMMON-EXCEPTIONS/README.md)
   — 예외(화이트리스트) 룰 분석 + 검증 (`905100` 미발동 발견, `905110` 정상)
+- [REQUEST-911-METHOD-ENFORCEMENT.conf](rules/REQUEST-911-METHOD-ENFORCEMENT/README.md)
+  — 메서드 정책 탐지 룰(`911100`) 공격 예제 + PL 게이팅 룰
 
 ## 환경 구성
 
