@@ -144,7 +144,7 @@ tests/
 ├── lib.sh        # 테스트용 nginx 기동, 메서드 요청, 룰 로그 카운트
 ├── verify.sh     # 룰 id별 검증 케이스
 ├── run-all.sh    # 전체 실행
-├── 911100.sh / 911011.sh ... (룰 id별)
+├── 911100.sh (룰 id별)
 └── (로그: ../../../logs/local_test/REQUEST-911-METHOD-ENFORCEMENT/)
 ```
 
@@ -156,10 +156,10 @@ cd rules/REQUEST-911-METHOD-ENFORCEMENT/tests
 
 현재 결과:
 ```
-PASS=13  FAIL=0  SKIP=8
+PASS=13  FAIL=0  SKIP=0
 ```
 - `911100` — 공격 예제(PUT/DELETE/PATCH) 403 + 로그 확인, 허용(GET/HEAD) 통과.
-- `911011`~`911018` — 탐지 룰이 아니라 PL 제어 룰이라 SKIP.
+- 게이팅 룰(`911011`~`911018`)은 탐지 대상이 아니므로 테스트에서 제외한다(개념: [paranoia-gating.md](../../modsecurity/paranoia-gating.md)).
 
 로그: `logs/local_test/REQUEST-911-METHOD-ENFORCEMENT/` (`run-all.log`, `<rule-id>.log`,
 `nginx-error.log`, `nginx-audit.log`)

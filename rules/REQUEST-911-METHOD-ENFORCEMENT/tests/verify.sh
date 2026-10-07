@@ -15,7 +15,7 @@ HARNESS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=lib.sh
 source "$HARNESS_DIR/lib.sh"
 
-ALL_IDS=(911011 911012 911013 911014 911015 911016 911017 911018 911100)
+ALL_IDS=(911100)
 
 assert_ge() { # desc expected_min actual
     _log "  (actual=$3 min=$2)"
@@ -50,15 +50,9 @@ case_911100() {
     check_method_allowed HEAD
 }
 
-# PL 게이팅 보조 룰 (탐지 아님)
-case_pl_gate() {
-    skip "$1: PL 게이팅(skipAfter) 보조 룰 — 공격 탐지 대상 아님 (911100 실행 여부 제어)"
-}
-
 dispatch() {
     case "$1" in
         911100) case_911100 ;;
-        911011|911012|911013|911014|911015|911016|911017|911018) case_pl_gate "$1" ;;
         *) fail "알 수 없는 룰 id: $1" ;;
     esac
 }
