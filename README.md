@@ -49,6 +49,8 @@ crs-pattern-lab/
 
 - [ModSecurity 실행 모델 (설정 vs 룰, phase)](modsecurity/execution-model.md)
   — directive/rule 적용·실행 시점, nginx 커넥터 훅, 로그가 남는 조건
+- [CRS 점수와 Paranoia Level 연결](modsecurity/score-and-paranoia.md)
+  — 룰 매칭 → 점수 누적(severity/변수) → PL 게이트 → 949 차단의 전체 연결
 
 `modsecurity/base-rules/` (기본룰 분석)
 
@@ -60,11 +62,61 @@ crs-pattern-lab/
 `rules/` (CRS 룰 파일별 분석 + 룰 id 검증 예제)
 
 - [REQUEST-901-INITIALIZATION.conf](rules/REQUEST-901-INITIALIZATION/README.md)
-  — 초기화 룰 분석 + 룰 id별 검증 스크립트/로그 (`tests/`)
+  — **901은 공격을 막는 파일이 아니다.**
 - [REQUEST-905-COMMON-EXCEPTIONS.conf](rules/REQUEST-905-COMMON-EXCEPTIONS/README.md)
-  — 예외(화이트리스트) 룰 분석 + 검증 (`905100` 미발동 발견, `905110` 정상)
+  — **로컬(127.0.0.1)에서 오는 서버 자체 헬스체크 요청을, CRS가 오탐하지 않도록 잠시 면제해 주는 파일.**
 - [REQUEST-911-METHOD-ENFORCEMENT.conf](rules/REQUEST-911-METHOD-ENFORCEMENT/README.md)
-  — 메서드 정책 탐지 룰(`911100`) 공격 예제 + PL 게이팅 룰
+  — **"허용 목록(`tx.allowed_methods`)에 없는 HTTP 메서드로 요청하면, CRS가 403으로 막는다."**
+- [REQUEST-913-SCANNER-DETECTION.conf](rules/REQUEST-913-SCANNER-DETECTION/README.md)
+  — **요청의 `User-Agent` 가 알려진 보안 스캐너 목록(`scanners-user-agents.data`)에 있으면 403으로 차단한다.**
+- [REQUEST-920-PROTOCOL-ENFORCEMENT.conf](rules/REQUEST-920-PROTOCOL-ENFORCEMENT/README.md)
+  — **HTTP 규약을 어긴 요청(헤더/본문/인자/Content-Type 등)을 탐지해, 정책 위반이면 403으로 차단한다.**
+- [REQUEST-921-PROTOCOL-ATTACK.conf](rules/REQUEST-921-PROTOCOL-ATTACK/README.md)
+  — **HTTP 프로토콜을 악용한 공격 패턴을 탐지한다.**
+- [REQUEST-922-MULTIPART-ATTACK.conf](rules/REQUEST-922-MULTIPART-ATTACK/README.md)
+  — 멀티파트(form-data) 파싱을 악용한 공격(charset/transfer-encoding/헤더 조작)을 탐지한다.
+- [REQUEST-930-APPLICATION-ATTACK-LFI.conf](rules/REQUEST-930-APPLICATION-ATTACK-LFI/README.md)
+  — 로컬 파일 포함(LFI) 공격을 탐지한다.
+- [REQUEST-931-APPLICATION-ATTACK-RFI.conf](rules/REQUEST-931-APPLICATION-ATTACK-RFI/README.md)
+  — 원격 파일 포함(RFI) 공격을 탐지한다.
+- [REQUEST-932-APPLICATION-ATTACK-RCE.conf](rules/REQUEST-932-APPLICATION-ATTACK-RCE/README.md)
+  — 원격 명령 실행(RCE) 공격을 탐지한다.
+- [REQUEST-933-APPLICATION-ATTACK-PHP.conf](rules/REQUEST-933-APPLICATION-ATTACK-PHP/README.md)
+  — PHP 코드/함수 삽입 공격을 탐지한다.
+- [REQUEST-934-APPLICATION-ATTACK-GENERIC.conf](rules/REQUEST-934-APPLICATION-ATTACK-GENERIC/README.md)
+  — 여러 공격 유형에 걸친 제네릭(휴리스틱) 공격을 탐지한다.
+- [REQUEST-941-APPLICATION-ATTACK-XSS.conf](rules/REQUEST-941-APPLICATION-ATTACK-XSS/README.md)
+  — XSS(크로스사이트 스크립팅) 공격을 탐지한다.
+- [REQUEST-942-APPLICATION-ATTACK-SQLI.conf](rules/REQUEST-942-APPLICATION-ATTACK-SQLI/README.md)
+  — SQL 인젝션 공격을 탐지한다.
+- [REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION.conf](rules/REQUEST-943-APPLICATION-ATTACK-SESSION-FIXATION/README.md)
+  — 세션 고정(Session Fixation) 공격을 탐지한다.
+- [REQUEST-944-APPLICATION-ATTACK-JAVA.conf](rules/REQUEST-944-APPLICATION-ATTACK-JAVA/README.md)
+  — Java(LDAP/Log4Shell 등) 공격을 탐지한다.
+- [REQUEST-949-BLOCKING-EVALUATION.conf](rules/REQUEST-949-BLOCKING-EVALUATION/README.md)
+  — 요청(인바운드) 점수가 임계값을 넘으면 403으로 차단한다.
+- [REQUEST-999-COMMON-EXCEPTIONS-AFTER.conf](rules/REQUEST-999-COMMON-EXCEPTIONS-AFTER/README.md)
+  — CRS 이후 공통 예외(사용자 추가용 템플릿, 기본은 비어 있음).
+- [RESPONSE-950-DATA-LEAKAGES.conf](rules/RESPONSE-950-DATA-LEAKAGES/README.md)
+  — 응답에서 데이터 유출(에러/소스 노출)을 탐지한다.
+- [RESPONSE-951-DATA-LEAKAGES-SQL.conf](rules/RESPONSE-951-DATA-LEAKAGES-SQL/README.md)
+  — 응답에서 SQL 에러/정보 유출을 탐지한다.
+- [RESPONSE-952-DATA-LEAKAGES-JAVA.conf](rules/RESPONSE-952-DATA-LEAKAGES-JAVA/README.md)
+  — 응답에서 Java 에러/스택트레이스 유출을 탐지한다.
+- [RESPONSE-953-DATA-LEAKAGES-PHP.conf](rules/RESPONSE-953-DATA-LEAKAGES-PHP/README.md)
+  — 응답에서 PHP 에러 유출을 탐지한다.
+- [RESPONSE-954-DATA-LEAKAGES-IIS.conf](rules/RESPONSE-954-DATA-LEAKAGES-IIS/README.md)
+  — 응답에서 IIS 에러 유출을 탐지한다.
+- [RESPONSE-955-WEB-SHELLS.conf](rules/RESPONSE-955-WEB-SHELLS/README.md)
+  — 응답에서 웹셸/백도어 흔적을 탐지한다.
+- [RESPONSE-956-DATA-LEAKAGES-RUBY.conf](rules/RESPONSE-956-DATA-LEAKAGES-RUBY/README.md)
+  — 응답에서 Ruby 에러 유출을 탐지한다.
+- [RESPONSE-959-BLOCKING-EVALUATION.conf](rules/RESPONSE-959-BLOCKING-EVALUATION/README.md)
+  — 아웃바운드 점수 임계 초과 시 응답을 차단한다.
+- [RESPONSE-980-CORRELATION.conf](rules/RESPONSE-980-CORRELATION/README.md)
+  — 요청/응답 단계의 어노말리 점수를 상관분석하고 통계를 남긴다.
+- [RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf](rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS/README.md)
+  — 응답 단계 CRS 이후 예외/차단동작 변경 템플릿(기본은 비어 있음).
 
 ## 환경 구성
 

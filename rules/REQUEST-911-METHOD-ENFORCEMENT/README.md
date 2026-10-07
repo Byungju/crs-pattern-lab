@@ -78,11 +78,14 @@ SecRule  REQUEST_METHOD   "!@within %{tx.allowed_methods}"   "phase:1, block, se
 | 룰 | 종류 | 한 줄 역할 |
 |----|------|-----------|
 | [911100](911100.md) | **탐지** | 메서드가 허용 목록 밖이면 **점수 5를 쌓는다** (이 룰 자체는 즉시 막지 않음) |
-| [911011](911011.md)~[911018](911018.md) | **게이팅(제어)** | paranoia level 에 따라 아래 PL 구간 룰을 **실행/건너뛰기**만 결정 (공격 탐지 아님) |
+| [911011](../../modsecurity/paranoia-gating.md)~[911018](../../modsecurity/paranoia-gating.md) | **게이팅(제어)** | paranoia level 에 따라 아래 PL 구간 룰을 **실행/건너뛰기**만 결정 (공격 탐지 아님) |
 | `SecMarker END-...` | 표식 | 게이팅 룰이 "여기로 점프"할 목적지 |
 | `949110` (다른 파일) | **차단** | 쌓인 점수가 임계값을 넘으면 **403** 을 반환 |
 
 ### 왜 게이팅 룰(911011~911018)이 필요한가? — paranoia level 개념
+
+> 게이트 개념 정본: [../../modsecurity/paranoia-gating.md](../../modsecurity/paranoia-gating.md)
+> (게이트별 `<id>.md` 문서는 이 공통 문서로 통합됨)
 
 - CRS는 룰을 **paranoia level(PL, 1~4)** 로 나눈다. PL이 높을수록 더 많은/민감한 룰이 켜진다.
 - 파일은 `PL1 구간`, `PL2 구간`, … 식으로 나뉘어 있고, 각 구간 앞에
