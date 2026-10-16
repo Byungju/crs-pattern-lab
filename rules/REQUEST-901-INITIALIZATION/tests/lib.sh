@@ -71,6 +71,7 @@ http {
     include mime.types;
     default_type application/octet-stream;
     modsecurity on;
+    access_log $TEST_LOG_DIR/nginx-access.log;
     modsecurity_rules_file $modsec;
     server {
         listen 127.0.0.1:$port;

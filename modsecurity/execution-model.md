@@ -112,8 +112,39 @@ phase 1: 901001 매칭(&TX:crs_setup_version==0) → deny 500  (업스트림 미
 > 모두** audit 로그에 남기고, 로그 파일을 삭제하지 않고 보존한다.
 > 자세한 내용은 [`../rules/REQUEST-901-INITIALIZATION/README.md`](../rules/REQUEST-901-INITIALIZATION/README.md) 참고.
 
-## 6. 참고
+## 6. CRS 로그와 nginx 로그는 별개다
+
+**중요**: ModSecurity(CRS) 로그가 없어도 **nginx 자체 로그는 남는다.** 둘은 다른 파일/의미다.
+
+| 로그 | 남기는 주체 | 내용 예 | 남는 조건 |
+|------|-------------|---------|-----------|
+| ModSecurity(error) | CRS 룰 | `[id "920100"] [msg "Invalid HTTP Request Line"]` | 룰이 매칭될 때 |
+| ModSecurity(audit) | ModSecurity | 트랜잭션 섹션(`---id-A--` …) | `SecAuditEngine`/`auditlog` 조건 |
+| nginx error_log | **nginx** | `client sent invalid request while reading client request line` | 요청/응답 처리 중 오류·알림 |
+| nginx access_log | **nginx** | `"GET /\x01 HTTP/1.1" 400` | 모든 요청(성공/실패) |
+
+- 예: `GET /\x01 HTTP/1.1` 처럼 **nginx가 파싱 단계에서 400으로 거부**하면
+  ModSecurity(access phase)에 도달하지 못해 **CRS 로그(예: 920100)는 없다.**
+  대신 **nginx error_log / access_log**에 기록된다.
+- 그러므로 "로그가 없다"를 판단할 때 **CRS 로그인지 nginx 로그인지**를 구분해야 한다.
+
+### 테스트 하네스의 로그 위치
+
+이 프로젝트의 하네스는 테스트용 nginx를 별도 설정으로 띄우며, 로그를 `logs/local_test/<파일>/` 에 모은다.
+
+| 파일 | 내용 |
+|------|------|
+| `<rule-id>.log` | 룰별 검증 결과(PASS/FAIL/SKIP) + 근거(LOG/audit 발췌) |
+| `nginx-error.log` | 테스트 nginx error log (ModSecurity 메시지 + nginx 메시지) |
+| `nginx-access.log` | 테스트 nginx access log (모든 요청, 400/403 포함) |
+| `nginx-audit.log` | 테스트 ModSecurity audit log |
+
+> SKIP 룰은 **트리거 요청을 보내지 않으므로** `<rule-id>.log` 에는 결과만 남고,
+> `nginx-access.log` 에는 하네스 준비용 요청 정도만 남는다. "CRS 로그 없음 ≠ nginx 로그 없음".
+
+## 7. 참고
 
 - ModSecurity Reference Manual (v3.x): <https://github.com/owasp-modsecurity/ModSecurity/wiki/Reference-Manual-(v3.x)>
 - nginx 커넥터 소스: `src/ModSecurity-nginx/src/`
 - 엔진 directive 분석: [base-rules/modsecurity-conf.md](base-rules/modsecurity-conf.md)
+- 점수/PL 연결: [score-and-paranoia.md](score-and-paranoia.md)
