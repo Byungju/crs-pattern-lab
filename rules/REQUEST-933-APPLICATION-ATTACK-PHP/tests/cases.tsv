@@ -1,0 +1,6 @@
+933100	path	403	/?x=%3C?php%20system('id');%20?%3E
+933160	path	403	/?x=%3C?php%20system('id');%20?%3E
+933161	path	403	/?x=%3C?php%20system('id');%20?%3E
+933190	path	403	/?x=%3C?php%20system('id');%20?%3E
+933152	path	403	/?x=phpinfo()
+933120	path	403	/?x=auto_prepend_file=/etc/passwd

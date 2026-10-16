@@ -1,0 +1,4 @@
+932350	path	403	/?x=|id
+932160	path	403	/?x=%3Bcat%20/etc/passwd
+932236	path	403	/?x=%3Bcat%20/etc/passwd
+932130	path	403	/?x=$(id)

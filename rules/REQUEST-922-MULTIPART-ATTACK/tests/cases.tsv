@@ -1,0 +1,2 @@
+922110	multipart	403	multipart/form-data; boundary=----WebKitFormBoundaryABC123|------WebKitFormBoundaryABC123\r\nContent-Disposition: form-data; name="a"\r\nContent-Type: text/plain; charset=foo\r\n\r\nx\r\n------WebKitFormBoundaryABC123--\r\n
+922120	multipart	403	multipart/form-data; boundary=----WebKitFormBoundaryABC123|------WebKitFormBoundaryABC123\r\nContent-Disposition: form-data; name="a"\r\nContent-Transfer-Encoding: base64\r\n\r\neA==\r\n------WebKitFormBoundaryABC123--\r\n
